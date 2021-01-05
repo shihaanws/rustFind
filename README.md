@@ -3,6 +3,6 @@ A Simple Command Line utility to find files in a directory and the byte count in
 
 
 
-#  Try running
+#  Run Command
 
      $ cargo run
