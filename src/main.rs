@@ -1,32 +1,52 @@
 use std::error::Error; 
 use std::path::Path;
-use std::fs;
-use std::borrow::Cow;  //(copy on write)
+
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 
-fn counting_function(file_name:Cow<str>) -> std::io::Result<()> {
 
-	let folder_path = "/home/shihaanws/Desktop/";
-	let file_path = folder_path.to_string()+&file_name.to_string();
-    let metadata = fs::metadata(file_path)?;
-    let counter=metadata.len()-1;
-    println!("The Text Count is {}",counter);
-    
-Ok(())
+
+fn count_words(f: std::fs::File) {
+    let mut words_map = HashMap::new();
+
+    for line in BufReader::new(f).lines() {
+        line.unwrap()
+            .split_whitespace()
+            .for_each(|word| *words_map.entry(word.to_owned()).or_insert(0) += 1);
+            println!("Word Occurences")
+    }
+
+    for (key, val) in words_map {
+        println!(" {} : {}", key, val);
+    }
 }
 
-
-
 fn main()-> Result<(), Box<dyn Error>> {
-    let folder_path ="/home/shihaanws/Desktop/";
+
+    let folder_path ="./folderPath";
     let path = Path::new(folder_path);
+
     for file_result in path.read_dir()? {
+
         let file = file_result?;
+        let file_path = file.path();
+
         println!("File Name : {}",file.file_name().to_string_lossy());
-        counting_function(file.file_name().to_string_lossy()).expect("Unable to find");
+
+        // println!("File path : {}",file_path.display());
+        
+        let file = File::open(file_path).unwrap();
+
+        count_words(file);
+
 
 }
 Ok(()) 
 
 }
+
+
+
 
