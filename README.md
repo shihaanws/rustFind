@@ -8,7 +8,7 @@ A Simple Command Line utility to find files in a directory and the word count in
      $ cargo run
      
      Finished dev [unoptimized + debuginfo] target(s) in 0.02s
-     Running `target/debug/hello-rust`
+     Running `target/debug/rustFind`
      File Name : demo.txt
      Word occurences
       simple : 1
